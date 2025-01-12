@@ -29,4 +29,8 @@ public class ProductService {
             ).forEach(System.out::println);
         }
     }
+
+    public List<Product> findAll(){
+        return productRepository.findAll();
+    }
 }
