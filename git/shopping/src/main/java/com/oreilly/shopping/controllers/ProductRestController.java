@@ -13,6 +13,7 @@ import com.oreilly.shopping.services.ProductService;
 
 import jakarta.websocket.server.PathParam;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,6 +63,17 @@ public class ProductRestController {
                 p.setPrice(product.getPrice());
 
                 return ResponseEntity.ok(service.saveProduct(p));
+            })
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
+        return service.findProductById(id)
+            .map(p -> {
+                service.deleteProduct(p);
+
+                return ResponseEntity.noContent().build();
             })
             .orElse(ResponseEntity.notFound().build());
     }

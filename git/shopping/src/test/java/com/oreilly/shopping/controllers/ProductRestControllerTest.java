@@ -116,4 +116,28 @@ public class ProductRestControllerTest {
                 .expectBody(Product.class)
                 .consumeWith(System.out::println);
     }
+
+    @Test
+    void deleteSingleProduct() {
+        List<Long> ids = getIds();
+        if (ids.isEmpty()) {
+            System.out.println("No ids found");
+            return;
+        }
+        
+        client.get()
+                .uri("/products/{id}", ids.get(0))
+                .exchange()
+                .expectStatus().isOk();
+
+        client.delete()
+                .uri("/products/{id}", ids.get(0))
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/products/{id}", ids.get(0))
+                .exchange()
+                .expectStatus().isNotFound();
+    }
 }
