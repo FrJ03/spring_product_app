@@ -30,7 +30,7 @@ public class ProductService {
         }
     }
 
-    public List<Product> findAll(){
+    public List<Product> findAllProducts(){
         return productRepository.findAll();
     }
 }
