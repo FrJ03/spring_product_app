@@ -2,6 +2,7 @@ package com.oreilly.shopping.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -11,11 +12,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oreilly.shopping.entities.Product;
+
+import reactor.core.publisher.Mono;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -78,5 +82,24 @@ public class ProductRestControllerTest {
             .uri("/products/999")
             .exchange()
             .expectStatus().isNotFound();
+    }
+
+    @Test
+    void insertProduct() {
+        List<Long> productIds = getIds();
+        assertFalse(productIds.contains(999L));
+        Product product = new Product("Chair", BigDecimal.valueOf(49.99));
+        
+        client.post()
+                .uri("/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(product), Product.class)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody()
+                .jsonPath("$.id").isNotEmpty()
+                .jsonPath("$.name").isEqualTo("Chair")
+                .jsonPath("$.price").isEqualTo(49.99);
     }
 }
