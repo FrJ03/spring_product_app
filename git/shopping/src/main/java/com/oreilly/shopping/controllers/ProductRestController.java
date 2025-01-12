@@ -39,6 +39,14 @@ public class ProductRestController {
     public List<Product> getProducts() {
         return service.findAllProducts();
     }
+
+    @GetMapping(params = "min")
+    public List<Product> getProducts(@RequestParam(defaultValue = "0.0") double min) {
+        if(min < 0)
+            throw new ProductMinimumPriceException(min);
+
+        return service.findAllProductsByMinPrice(min);
+    }
     
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {

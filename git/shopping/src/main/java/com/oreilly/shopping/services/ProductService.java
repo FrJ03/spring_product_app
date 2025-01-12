@@ -50,4 +50,8 @@ public class ProductService {
     public void deleteAllProducts(){
         productRepository.deleteAllInBatch();
     }
+
+    public List<Product> findAllProductsByMinPrice(double min){
+        return productRepository.findAllByPriceGreaterThanEqual(BigDecimal.valueOf(min));
+    }
 }
