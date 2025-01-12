@@ -77,4 +77,11 @@ public class ProductRestController {
             })
             .orElse(ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteAllProducts(){
+        service.deleteAllProducts();
+
+        return ResponseEntity.noContent().build();
+    }
 }

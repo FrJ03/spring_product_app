@@ -120,11 +120,9 @@ public class ProductRestControllerTest {
     @Test
     void deleteSingleProduct() {
         List<Long> ids = getIds();
-        if (ids.isEmpty()) {
-            System.out.println("No ids found");
-            return;
-        }
         
+        assertFalse(ids.isEmpty());
+
         client.get()
                 .uri("/products/{id}", ids.get(0))
                 .exchange()
@@ -139,5 +137,20 @@ public class ProductRestControllerTest {
                 .uri("/products/{id}", ids.get(0))
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    void deleteAllProducts() {
+        List<Long> ids = getIds();
+
+        client.delete()
+                .uri("/products")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        client.get()
+                .uri("/products")
+                .exchange()
+                .expectBodyList(Product.class).hasSize(0);
     }
 }
