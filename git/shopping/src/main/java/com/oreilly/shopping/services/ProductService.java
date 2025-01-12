@@ -2,6 +2,7 @@ package com.oreilly.shopping.services;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,5 +33,9 @@ public class ProductService {
 
     public List<Product> findAllProducts(){
         return productRepository.findAll();
+    }
+
+    public Optional<Product> findProductById(Long id){
+        return productRepository.findById(id);
     }
 }
