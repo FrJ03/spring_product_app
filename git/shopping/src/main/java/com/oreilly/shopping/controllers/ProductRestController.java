@@ -54,4 +54,15 @@ public class ProductRestController {
 
         return ResponseEntity.created(location).body(p);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product){
+        return service.findProductById(id)
+            .map(p -> {
+                p.setName(product.getName());
+                p.setPrice(product.getPrice());
+
+                return ResponseEntity.ok(service.saveProduct(p));
+            })
+            .orElse(ResponseEntity.notFound().build());
+    }
 }

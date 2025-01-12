@@ -102,4 +102,18 @@ public class ProductRestControllerTest {
                 .jsonPath("$.name").isEqualTo("Chair")
                 .jsonPath("$.price").isEqualTo(49.99);
     }
+
+    @Test
+    void updateProduct() {
+        Product product = getProduct(getIds().get(0));
+        product.setPrice(product.getPrice().add(BigDecimal.ONE));
+
+        client.put()
+                .uri("/products/{id}", product.getId())
+                .body(Mono.just(product), Product.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Product.class)
+                .consumeWith(System.out::println);
+    }
 }
