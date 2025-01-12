@@ -48,6 +48,6 @@ public class ProductService {
     }
 
     public void deleteAllProducts(){
-        productRepository.deleteAll();
+        productRepository.deleteAllInBatch();
     }
 }
